@@ -43,7 +43,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class SshPlugin implements MethodCallHandler, StreamHandler {
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "ssh");
+    final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_sftp");
     final EventChannel eventChannel = new EventChannel(registrar.messenger(), "shell_sftp");
     final SshPlugin instance = new SshPlugin();
     channel.setMethodCallHandler(instance);

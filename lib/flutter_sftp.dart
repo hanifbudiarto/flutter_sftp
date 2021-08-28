@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
-const MethodChannel _channel = const MethodChannel('ssh');
+const MethodChannel _channel = const MethodChannel('flutter_sftp');
 const EventChannel _eventChannel = const EventChannel('shell_sftp');
 Stream<dynamic>? _onStateChanged;
 
