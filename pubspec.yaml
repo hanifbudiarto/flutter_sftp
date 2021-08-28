@@ -1,18 +1,17 @@
-name: ssh
+name: flutter_sftp
 description: SSH and SFTP client for Flutter. Wraps iOS library NMSSH and Android library JSch.
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/shaqian/flutter_ssh
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
-  flutter: ">=1.10.0 <2.0.0"
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  meta: ^1.1.8
-  uuid: ^2.0.0
+  uuid: ^3.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

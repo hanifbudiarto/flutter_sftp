@@ -1,38 +1,37 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 const MethodChannel _channel = const MethodChannel('ssh');
 const EventChannel _eventChannel = const EventChannel('shell_sftp');
-Stream<dynamic> _onStateChanged;
+Stream<dynamic>? _onStateChanged;
 
 Stream<dynamic> get onStateChanged {
   if (_onStateChanged == null) {
     _onStateChanged =
         _eventChannel.receiveBroadcastStream().map((dynamic event) => event);
   }
-  return _onStateChanged;
+  return _onStateChanged!;
 }
 
 typedef void Callback(dynamic result);
 
 class SSHClient {
-  String id;
+  late String id;
   String host;
   int port;
   String username;
   dynamic passwordOrKey;
-  StreamSubscription<dynamic> stateSubscription;
-  Callback shellCallback;
-  Callback uploadCallback;
-  Callback downloadCallback;
+  late StreamSubscription<dynamic> stateSubscription;
+  Callback? shellCallback;
+  Callback? uploadCallback;
+  Callback? downloadCallback;
 
   SSHClient({
-    @required this.host,
-    @required this.port,
-    @required this.username,
-    @required
+    required this.host,
+    required this.port,
+    required this.username,
+    required
         this.passwordOrKey, // password or {privateKey: value, [publicKey: value, passphrase: value]}
   }) {
     var uuid = new Uuid();
@@ -45,16 +44,19 @@ class SSHClient {
   _parseOutput(dynamic result) {
     switch (result["name"]) {
       case "Shell":
-        if (shellCallback != null && result["key"] == id)
-          shellCallback(result["value"]);
+        if (shellCallback != null && result["key"] == id) {
+          shellCallback!(result["value"]);
+        }
         break;
       case "DownloadProgress":
-        if (downloadCallback != null && result["key"] == id)
-          downloadCallback(result["value"]);
+        if (downloadCallback != null && result["key"] == id) {
+          downloadCallback!(result["value"]);
+        }
         break;
       case "UploadProgress":
-        if (uploadCallback != null && result["key"] == id)
-          uploadCallback(result["value"]);
+        if (uploadCallback != null && result["key"] == id) {
+          uploadCallback!(result["value"]);
+        }
         break;
     }
   }
@@ -90,7 +92,7 @@ class SSHClient {
 
   Future<String> startShell({
     String ptyType = "vanilla", // vanilla, vt100, vt102, vt220, ansi, xterm
-    Callback callback,
+    Callback? callback,
   }) async {
     shellCallback = callback;
     var result = await _channel.invokeMethod('startShell', {
@@ -131,8 +133,8 @@ class SSHClient {
   }
 
   Future<String> sftpRename({
-    @required String oldPath,
-    @required String newPath,
+    required String oldPath,
+    required String newPath,
   }) async {
     var result = await _channel.invokeMethod('sftpRename', {
       "id": id,
@@ -167,9 +169,9 @@ class SSHClient {
   }
 
   Future<String> sftpDownload({
-    @required String path,
-    @required String toPath,
-    Callback callback,
+    required String path,
+    required String toPath,
+    Callback? callback,
   }) async {
     downloadCallback = callback;
     var result = await _channel.invokeMethod('sftpDownload', {
@@ -187,9 +189,9 @@ class SSHClient {
   }
 
   Future<String> sftpUpload({
-    @required String path,
-    @required String toPath,
-    Callback callback,
+    required String path,
+    required String toPath,
+    Callback? callback,
   }) async {
     uploadCallback = callback;
     var result = await _channel.invokeMethod('sftpUpload', {

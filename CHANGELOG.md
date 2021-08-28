@@ -1,3 +1,7 @@
+## 0.0.8
+* BREAKING CHANGES
+* Newer version of SDK 
+
 ## 0.0.7
 
 * Moved getInputStream before channel connect on Android.
